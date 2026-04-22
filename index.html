@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أسئلة اليسر</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0D1117;
+    --surface: #161C26;
+    --card: #1C2433;
+    --teal: #2DD4BF;
+    --teal-dim: rgba(45,212,191,0.12);
+    --teal-mid: rgba(45,212,191,0.25);
+    --sky: #38BDF8;
+    --mint: #6EE7B7;
+    --text: #E2EDF5;
+    --muted: #7B92A8;
+    --soft: #A8BDC9;
+    --border: rgba(45,212,191,0.15);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse 60% 40% at 15% 0%, rgba(45,212,191,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 85% 100%, rgba(56,189,248,0.06) 0%, transparent 60%);
+    pointer-events:none; z-index:0;
+  }
+
+  .wrap {
+    position: relative; z-index:1;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 48px; }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 18px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.78rem;
+    color: var(--teal);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    background: var(--teal-dim);
+  }
+
+  .header h1 {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.9rem, 5vw, 2.8rem);
+    color: var(--text);
+    line-height: 1.35;
+  }
+
+  .header h1 span { color: var(--teal); }
+
+  .header p {
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* Category tabs */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+
+  .tab {
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .tab:hover { border-color: var(--teal); color: var(--teal); }
+  .tab.active {
+    background: var(--teal-mid);
+    border-color: var(--teal);
+    color: var(--teal);
+    font-weight: 500;
+  }
+
+  /* Section title */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .section-label .line {
+    flex:1; height:1px;
+    background: linear-gradient(90deg, var(--teal), transparent);
+  }
+
+  .section-label span {
+    font-size: 0.8rem;
+    color: var(--teal);
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  /* Questions grid */
+  .questions-section { margin-bottom: 48px; display: none; }
+  .questions-section.visible { display: block; }
+
+  .q-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: slideIn 0.4s ease both;
+  }
+
+  .q-card:nth-child(1) { animation-delay: 0.05s; }
+  .q-card:nth-child(2) { animation-delay: 0.1s; }
+  .q-card:nth-child(3) { animation-delay: 0.15s; }
+  .q-card:nth-child(4) { animation-delay: 0.2s; }
+  .q-card:nth-child(5) { animation-delay: 0.25s; }
+  .q-card:nth-child(6) { animation-delay: 0.3s; }
+
+  @keyframes slideIn {
+    from { opacity:0; transform: translateX(20px); }
+    to { opacity:1; transform: translateX(0); }
+  }
+
+  .q-card::after {
+    content:'';
+    position:absolute; inset:0;
+    background: linear-gradient(135deg, var(--teal-dim) 0%, transparent 60%);
+    opacity:0;
+    transition: opacity 0.3s ease;
+  }
+
+  .q-card:hover { border-color: rgba(45,212,191,0.4); transform: translateX(-4px); }
+  .q-card:hover::after { opacity: 1; }
+
+  .q-card.expanded { border-color: rgba(45,212,191,0.5); background: #1E2D3E; }
+
+  .q-num {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--teal-dim);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.82rem;
+    color: var(--teal);
+    flex-shrink: 0;
+    font-weight: 700;
+    position: relative; z-index:1;
+  }
+
+  .q-content { flex:1; position: relative; z-index:1; }
+
+  .q-text {
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .q-expand {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(45,212,191,0.12);
+    font-size: 0.88rem;
+    color: var(--soft);
+    line-height: 1.8;
+    display: none;
+    font-weight: 300;
+  }
+
+  .q-expand.show { display: block; }
+
+  .q-hint {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--teal);
+    opacity: 0.75;
+  }
+
+  .q-arrow {
+    margin-right: auto;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+    user-select: none;
+    position: relative; z-index:1;
+  }
+
+  .q-card.expanded .q-arrow { transform: rotate(90deg); color: var(--teal); }
+
+  /* Random card */
+  .random-zone {
+    margin-top: 48px;
+    text-align: center;
+  }
+
+  .random-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 36px;
+    background: linear-gradient(135deg, rgba(45,212,191,0.15), rgba(56,189,248,0.1));
+    border: 1px solid var(--teal);
+    border-radius: 100px;
+    color: var(--teal);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .random-btn:hover {
+    background: rgba(45,212,191,0.2);
+    transform: scale(1.03);
+    box-shadow: 0 0 30px rgba(45,212,191,0.15);
+  }
+
+  .spotlight {
+    display: none;
+    margin-top: 28px;
+    padding: 32px 36px;
+    background: linear-gradient(135deg, #1A2E3A, #1C2433);
+    border: 1px solid rgba(45,212,191,0.3);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .spotlight::before {
+    content:'';
+    position:absolute; top:-40px; right:-40px;
+    width:150px; height:150px;
+    background: radial-gradient(circle, rgba(45,212,191,0.12), transparent 70%);
+    border-radius:50%;
+  }
+
+  .spotlight.show { display: block; animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+  @keyframes popIn {
+    from { opacity:0; transform: scale(0.92); }
+    to { opacity:1; transform: scale(1); }
+  }
+
+  .spotlight-cat {
+    font-size: 0.75rem;
+    color: var(--teal);
+    letter-spacing: 0.12em;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  .spotlight-q {
+    font-family: 'Amiri', serif;
+    font-size: 1.5rem;
+    color: var(--text);
+    line-height: 1.6;
+    position: relative; z-index:1;
+  }
+
+  .spotlight-hint {
+    margin-top: 16px;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    position: relative; z-index:1;
+  }
+
+  /* Footer */
+  .footer-note {
+    text-align: center;
+    margin-top: 60px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 32px 16px 60px; }
+    .q-card { padding: 18px 16px; }
+    .spotlight { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="header-badge">✦ أسئلة تحوّل الحالة</div>
+    <h1>أسئلة <span>اليسر والسهولة</span><br>نحو أهدافك</h1>
+    <p>اختر صيغة تناسب حالتك الآن — كل سؤال يفتح باباً مختلفاً في عقلك</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showSection('unlock')">🔓 فتح المقاومة</button>
+    <button class="tab" onclick="showSection('imagine')">🌊 الانسياب</button>
+    <button class="tab" onclick="showSection('identity')">🪞 هوية اليسر</button>
+    <button class="tab" onclick="showSection('evidence')">✅ الأدلة</button>
+    <button class="tab" onclick="showSection('action')">⚡ تحريك العمل</button>
+  </div>
+
+  <!-- Section 1: فتح المقاومة -->
+  <div class="questions-section visible" id="unlock">
+    <div class="section-label">
+      <div class="line"></div>
+      <span>🔓 أسئلة لفتح المقاومة الداخلية</span>
+      <div class="line" style="background: linear-gradient(90deg, transparent, var(--teal));"></div>
+    </div>
+    <div class="q-grid">
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">١</div>
+        <div class="q-content">
+          <div class="q-text">ما الذي أعتقده عن نفسي يجعل هذا الهدف يبدو صعباً؟</div>
+          <div class="q-expand">هذا السؤال يكشف المعتقد المخفي خلف الصعوبة. حين تجد الإجابة، اسأل نفسك: هل هذا المعتقد حقيقي؟ ومن أين جاء؟<span class="q-hint">→ يُستخدم حين تشعر بالعالق</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٢</div>
+        <div class="q-content">
+          <div class="q-text">لو كان هذا الهدف أسهل بـ١٠ أضعاف مما أتخيل — ماذا سأفعل الآن؟</div>
+          <div class="q-expand">يخدع عقلك الذي يبالغ في تقدير الصعوبة. الإجابة غالباً تكون خطوة بسيطة جداً كنت تتجنبها.<span class="q-hint">→ لكسر التسويف</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٣</div>
+        <div class="q-content">
+          <div class="q-text">ما الذي أخاف أن أخسره لو تحقق هذا الهدف؟</div>
+          <div class="q-expand">أحياناً نقاوم أهدافنا لأنها تعني تغييرات نخشاها — هوية جديدة، علاقات مختلفة، مسؤوليات. الوعي بهذا يُزيل المقاومة اللاواعية.<span class="q-hint">→ للمقاومة العميقة الغامضة</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٤</div>
+        <div class="q-content">
+          <div class="q-text">ما الذي يجعلني أعتقد أن الوصول لهدفي يجب أن يكون مؤلماً؟</div>
+          <div class="q-expand">كثيرون يحملون برمجة "لا نجاح بدون معاناة". هذا السؤال يفحص هذه البرمجة ويضعها تحت الضوء.<span class="q-hint">→ لمن يربط الإنجاز بالتعب</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٥</div>
+        <div class="q-content">
+          <div class="q-text">لو أذنتُ لنفسي بالوصول بسهولة — ماذا سيتغير؟</div>
+          <div class="q-expand">كلمة "أذنتُ" قوية جداً. كثير من المقاومة ليست من الخارج بل من رفضنا اللاواعي لإذن الوصول لأنفسنا.<span class="q-hint">→ سؤال عميق جداً يستحق التأمل</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: الانسياب -->
+  <div class="questions-section" id="imagine">
+    <div class="section-label">
+      <div class="line"></div>
+      <span>🌊 أسئلة الانسياب والتدفق</span>
+      <div class="line" style="background: linear-gradient(90deg, transparent, var(--teal));"></div>
+    </div>
+    <div class="q-grid">
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">١</div>
+        <div class="q-content">
+          <div class="q-text">كيف يمكن أن يصل هذا الهدف إليّ بطريقة لم أفكر بها بعد؟</div>
+          <div class="q-expand">يفتح احتمالات لا تقيدها خطتك الحالية. الكون أكثر إبداعاً من عقلك الواعي. اترك السؤال مفتوحاً وراقب ما يظهر.<span class="q-hint">→ للتوسع في إمكانيات الوصول</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٢</div>
+        <div class="q-content">
+          <div class="q-text">ما الشعور الذي أريده حين يتحقق هذا الهدف؟ وكيف أستطيع أن أشعر به الآن؟</div>
+          <div class="q-expand">الشعور هو الوقود، وليس الهدف نفسه. حين تعيش الشعور مسبقاً تصبح حالتك الداخلية مغناطيساً لما تريده.<span class="q-hint">→ لتفعيل الجذب من الداخل</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٣</div>
+        <div class="q-content">
+          <div class="q-text">ما الخطوة التالية التي تشعر بالخفّة والسهولة — حتى لو كانت صغيرة؟</div>
+          <div class="q-expand">لا تبحث دائماً عن الخطوة الأكبر — ابحث عن الأخف. اليسر يبدأ في التفاصيل الصغيرة ثم يتوسع.<span class="q-hint">→ لمن يريد حركة فورية</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٤</div>
+        <div class="q-content">
+          <div class="q-text">لو أن الطريق لهدفي كان ممتعاً بحد ذاته — كيف سيبدو؟</div>
+          <div class="q-expand">يغير علاقتك بالرحلة نفسها. حين تصبح الرحلة ممتعة تصبح طاقتك أعلى وجذبك للفرص أقوى.<span class="q-hint">→ لتحويل العبء إلى تجربة</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٥</div>
+        <div class="q-content">
+          <div class="q-text">أين أنا الآن أُقاوم ما هو في صالحي؟</div>
+          <div class="q-expand">أحياناً الفرصة موجودة والمساعدة موجودة — لكننا نقاومها خوفاً أو تعباً أو غروراً. هذا السؤال يكشف ذلك.<span class="q-hint">→ للمراجعة الصادقة</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: هوية اليسر -->
+  <div class="questions-section" id="identity">
+    <div class="section-label">
+      <div class="line"></div>
+      <span>🪞 أسئلة هوية اليسر</span>
+      <div class="line" style="background: linear-gradient(90deg, transparent, var(--teal));"></div>
+    </div>
+    <div class="q-grid">
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">١</div>
+        <div class="q-content">
+          <div class="q-text">كيف يفكر الشخص الذي تأتيه الأمور بسهولة في هذا المجال؟</div>
+          <div class="q-expand">لا تسأل "ماذا يفعل" بل "كيف يفكر". الأفعال تتبع التفكير. حين تتبنى طريقة تفكيره تبدأ تفعل ما يفعل تلقائياً.<span class="q-hint">→ لاستعارة نمط التفكير</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٢</div>
+        <div class="q-content">
+          <div class="q-text">ما الذي سأقوله عن نفسي لو كنتُ الشخص الذي حقق هذا الهدف بالفعل؟</div>
+          <div class="q-expand">الهوية تسبق الإنجاز — لا تتبعه. حين تتحدث عن نفسك كشخص وصل، تبدأ في التصرف كذلك قبل أن "تصل" رسمياً.<span class="q-hint">→ لبناء الهوية الجديدة</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٣</div>
+        <div class="q-content">
+          <div class="q-text">ما الذي كنت سأفعله اليوم لو كنت أعرف أن نجاحي مضمون؟</div>
+          <div class="q-expand">يزيل خوف الفشل من المعادلة ويُظهر ما تعرف فعلاً أنك يجب أن تفعله. الإجابة هي خطوتك التالية.<span class="q-hint">→ للحصول على وضوح فوري</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٤</div>
+        <div class="q-content">
+          <div class="q-text">ما الذي يمنعني من أن أكون الآن الشخص الذي يستحق هذا الهدف؟</div>
+          <div class="q-expand">الاستحقاق الداخلي أهم من الجدارة الخارجية. إذا لم تشعر أنك تستحق، فحتى لو وصلت ستُفلت من يدك.<span class="q-hint">→ للعمل على جذر الاستحقاق</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٥</div>
+        <div class="q-content">
+          <div class="q-text">ماذا تقول نسخة المستقبل التي وصلت لهذا الهدف عمّا فعلته الآن؟</div>
+          <div class="q-expand">اتصل بحكمة نسختك المستقبلية. هي لديها المنظور الذي يحتاجه الحاضر — الوضوح والهدوء والإذن بالاستمرار.<span class="q-hint">→ للحصول على توجيه من الداخل</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: الأدلة -->
+  <div class="questions-section" id="evidence">
+    <div class="section-label">
+      <div class="line"></div>
+      <span>✅ أسئلة الأدلة والممكن</span>
+      <div class="line" style="background: linear-gradient(90deg, transparent, var(--teal));"></div>
+    </div>
+    <div class="q-grid">
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">١</div>
+        <div class="q-content">
+          <div class="q-text">ما المرات التي جاءت فيها الأمور بسهولة في حياتي قبل الآن؟</div>
+          <div class="q-expand">عقلك يؤمن بما رآه يحدث من قبل. استحضار أدلة من ماضيك يُثبت لعقلك أن اليسر ممكن ومألوف لك.<span class="q-hint">→ لبناء الثقة بالممكن</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٢</div>
+        <div class="q-content">
+          <div class="q-text">من أعرفه حقق شيئاً مشابهاً لما أريد — وكيف وصل؟</div>
+          <div class="q-expand">النموذج الحي أقوى من أي كتاب. حين ترى أن شخصاً من لحمك ودم وصل، يُزيل عقلك عذر "هذا مستحيل بالنسبة لي".<span class="q-hint">→ لكسر وهم الاستثناء</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٣</div>
+        <div class="q-content">
+          <div class="q-text">ما الأشياء التي كانت تبدو مستحيلة عليّ قبل سنوات وأصبحت سهلة الآن؟</div>
+          <div class="q-expand">يُريك أن الصعوبة مؤقتة دائماً. ما تراه اليوم جبلاً كان شخص آخر يراه جبلاً وتجاوزه — وأنت فعلت ذلك أيضاً من قبل.<span class="q-hint">→ لاستعادة الثقة بالقدرة</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٤</div>
+        <div class="q-content">
+          <div class="q-text">ما الموارد والقدرات التي أمتلكها الآن ولم أكن أمتلكها قبل؟</div>
+          <div class="q-expand">نميل لرؤية ما ينقصنا وننسى ما عندنا. هذا السؤال يُعيد الانتباه للقوة الموجودة فعلاً — وهي أكثر مما تظن.<span class="q-hint">→ للخروج من عقلية الشُّح</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: تحريك العمل -->
+  <div class="questions-section" id="action">
+    <div class="section-label">
+      <div class="line"></div>
+      <span>⚡ أسئلة لتحريك العمل بخفة</span>
+      <div class="line" style="background: linear-gradient(90deg, transparent, var(--teal));"></div>
+    </div>
+    <div class="q-grid">
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">١</div>
+        <div class="q-content">
+          <div class="q-text">ما الخطوة الواحدة الأصغر الممكنة التي أستطيع أن أفعلها في 5 دقائق؟</div>
+          <div class="q-expand">البدء هو أصعب جزء. إذا جعلت الخطوة الأولى صغيرة لدرجة الضحك، ستجد أنك تواصل بعدها تلقائياً — الزخم يبني نفسه.<span class="q-hint">→ لكسر الجمود الفوري</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٢</div>
+        <div class="q-content">
+          <div class="q-text">ما الذي أستطيع أن أُفوّضه أو أُلغيه أو أُبسّطه في مسار هدفي؟</div>
+          <div class="q-expand">اليسر يعني أيضاً العمل الأذكى. ليس كل خطوة ضرورية — بعضها عادات قديمة أو خوف مُتنكّر بزي عمل.<span class="q-hint">→ لتبسيط المسار</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٣</div>
+        <div class="q-content">
+          <div class="q-text">لو كان لديّ مُرشد يُحبني ويريد نجاحي — ماذا سيقول لي الآن؟</div>
+          <div class="q-expand">يُشغّل الصوت الداخلي الحكيم بدل الصوت النقدي. الإجابة الأولى التي تطرأ على ذهنك غالباً هي ما تحتاج سماعه.<span class="q-hint">→ للحصول على توجيه دافئ</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٤</div>
+        <div class="q-content">
+          <div class="q-text">ما الذي سأندم عليه لو لم أفعله اليوم بعد عام من الآن؟</div>
+          <div class="q-expand">ينقل المنظور للمستقبل ويُزيل ضغط الخوف الحاضر. الندم المُتخيّل أقوى محرّك من أي دافع خارجي.<span class="q-hint">→ لمن يحتاج وضوحاً في الأولويات</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+      <div class="q-card" onclick="toggle(this)">
+        <div class="q-num">٥</div>
+        <div class="q-content">
+          <div class="q-text">ما الذي يشعر بالـ"نعم" في جسدي — لا في رأسي — في هذا الموقف؟</div>
+          <div class="q-expand">الجسد يعرف قبل العقل. الـ"نعم" الحقيقية تشعر بالانفتاح والدفء. الـ"نعم" الخائفة تشعر بالضيق والتوتر. العمل من الـ"نعم" الحقيقي هو اليسر بعينه.<span class="q-hint">→ للقرارات والخطوات المربكة</span></div>
+        </div>
+        <div class="q-arrow">▶</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Random -->
+  <div class="random-zone">
+    <button class="random-btn" onclick="showRandom()">
+      <span>✦</span>
+      سؤال عشوائي لهذه اللحظة
+    </button>
+    <div class="spotlight" id="spotlight">
+      <div class="spotlight-cat" id="spotlight-cat"></div>
+      <div class="spotlight-q" id="spotlight-q"></div>
+      <div class="spotlight-hint" id="spotlight-hint"></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    اختر سؤالاً واحداً يوميًا — واجلس معه 10 دقائق.<br>
+    لا تبحث عن الإجابة الصحيحة، بل عن الإجابة الصادقة.
+  </div>
+
+</div>
+
+<script>
+  const allQ = [
+    { cat: "🔓 فتح المقاومة", q: "ما الذي أعتقده عن نفسي يجعل هذا الهدف يبدو صعباً؟", hint: "يكشف المعتقد المخفي خلف الصعوبة." },
+    { cat: "🔓 فتح المقاومة", q: "لو كان هذا الهدف أسهل بـ١٠ أضعاف — ماذا سأفعل الآن؟", hint: "يخدع عقلك الذي يبالغ في تقدير الصعوبة." },
+    { cat: "🔓 فتح المقاومة", q: "ما الذي أخاف أن أخسره لو تحقق هذا الهدف؟", hint: "يكشف المقاومة اللاواعية الأعمق." },
+    { cat: "🔓 فتح المقاومة", q: "لو أذنتُ لنفسي بالوصول بسهولة — ماذا سيتغير؟", hint: "كثير من المقاومة هي رفض اللاواعي لإذن الوصول." },
+    { cat: "🌊 الانسياب", q: "ما الشعور الذي أريده حين يتحقق هذا الهدف؟ وكيف أشعر به الآن؟", hint: "الشعور هو الوقود وليس الهدف نفسه." },
+    { cat: "🌊 الانسياب", q: "كيف يمكن أن يصل هذا الهدف إليّ بطريقة لم أفكر بها بعد؟", hint: "يفتح احتمالات لا تقيدها خطتك الحالية." },
+    { cat: "🌊 الانسياب", q: "أين أنا الآن أُقاوم ما هو في صالحي؟", hint: "أحياناً الفرصة موجودة — لكننا نقاومها." },
+    { cat: "🪞 هوية اليسر", q: "كيف يفكر الشخص الذي تأتيه الأمور بسهولة في هذا المجال؟", hint: "الأفعال تتبع التفكير، لا العكس." },
+    { cat: "🪞 هوية اليسر", q: "ما الذي كنت سأفعله اليوم لو كنت أعرف أن نجاحي مضمون؟", hint: "يُزيل خوف الفشل من المعادلة." },
+    { cat: "🪞 هوية اليسر", q: "ماذا تقول نسخة المستقبل التي وصلت عمّا فعلته الآن؟", hint: "اتصل بحكمة نسختك المستقبلية." },
+    { cat: "✅ الأدلة", q: "ما المرات التي جاءت فيها الأمور بسهولة في حياتي قبل الآن؟", hint: "عقلك يؤمن بما رآه يحدث من قبل." },
+    { cat: "✅ الأدلة", q: "ما الأشياء التي كانت تبدو مستحيلة عليّ قبل سنوات وأصبحت سهلة الآن؟", hint: "يُريك أن الصعوبة مؤقتة دائماً." },
+    { cat: "⚡ تحريك العمل", q: "ما الخطوة الواحدة الأصغر الممكنة التي أستطيع أن أفعلها في 5 دقائق؟", hint: "الزخم الصغير يبني نفسه تلقائياً." },
+    { cat: "⚡ تحريك العمل", q: "ما الذي سأندم عليه لو لم أفعله اليوم بعد عام من الآن؟", hint: "الندم المُتخيّل أقوى محرّك من أي دافع خارجي." },
+    { cat: "⚡ تحريك العمل", q: "ما الذي يشعر بالـ'نعم' في جسدي — لا في رأسي — في هذا الموقف؟", hint: "العمل من الـ'نعم' الحقيقي هو اليسر بعينه." },
+  ];
+
+  function toggle(card) {
+    const expand = card.querySelector('.q-expand');
+    const isOpen = card.classList.contains('expanded');
+    document.querySelectorAll('.q-card').forEach(c => {
+      c.classList.remove('expanded');
+      c.querySelector('.q-expand').classList.remove('show');
+    });
+    if (!isOpen) {
+      card.classList.add('expanded');
+      expand.classList.add('show');
+    }
+  }
+
+  function showSection(id) {
+    document.querySelectorAll('.questions-section').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('visible');
+    event.target.classList.add('active');
+    document.getElementById('spotlight').classList.remove('show');
+  }
+
+  function showRandom() {
+    const q = allQ[Math.floor(Math.random() * allQ.length)];
+    const el = document.getElementById('spotlight');
+    el.classList.remove('show');
+    void el.offsetWidth;
+    document.getElementById('spotlight-cat').textContent = q.cat;
+    document.getElementById('spotlight-q').textContent = q.q;
+    document.getElementById('spotlight-hint').textContent = q.hint;
+    el.classList.add('show');
+  }
+</script>
+</body>
+</html>
